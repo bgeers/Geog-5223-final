@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ArcGIS.Core.Data;
 using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 
@@ -25,6 +26,8 @@ namespace Interactivity
     /// </summary>
     public partial class Dockpane1View : UserControl
     {
+        private static Dockpane2ViewModel pane2 = FrameworkApplication.DockPaneManager.Find("Interactivity_Dockpane2") as Dockpane2ViewModel;
+        
         public Dockpane1View()
         {
             InitializeComponent();
@@ -76,11 +79,12 @@ namespace Interactivity
                 if (fld.FieldType == FieldType.String)
                     lstFields.Items.Add(fld.Name);
             }
-            lstFields.SelectAll();
+            //lstFields.SelectAll();
         }
 
         private async void btnFind_Click(object sender, RoutedEventArgs e)
         {
+            string layerInfo = "";
             string text = txtQuery.Text;
             if (text == "")
                 return;
@@ -101,7 +105,7 @@ namespace Interactivity
                     query += " OR ";
             }
 
-            System.Windows.MessageBox.Show(query);
+            //System.Windows.MessageBox.Show(query);
 
             QueryFilter filter = new QueryFilter
             {
@@ -110,15 +114,51 @@ namespace Interactivity
 
             // MessageBox.Show(query);
 
+            
+            // select the features
             await QueuedTask.Run(() =>
             {
-                int c = 0;
-                using (Selection sel = fl.Select(filter))
+                var selection = fl.Select(filter, SelectionCombinationMethod.Add);
+                //Finds attributes of the selected item
+                using (RowCursor rc = fl.Search(filter))
                 {
-                    c = sel.GetCount();
+                    while (rc.MoveNext())
+                    {
+                        using (Feature feature = (Feature)rc.Current)
+                        {
+                            layerInfo += "Address: " + feature["ShortLabel"] + "\n";
+                            layerInfo += "Neighborhood: " + feature["Nbrhd"] + "\n";
+                            layerInfo += "Building type: " + feature["USER_Type"] + "\n";
+                            try
+                            {
+                                layerInfo += "Bedrooms: " + feature["USER_Bedro"] + "\n";
+                            }
+                            catch
+                            {
+                                layerInfo += "Bedrooms: " + feature["USER_Bdrm_"] + "\n";
+                            }
+
+                            try
+                            {
+                                layerInfo += "Bathrooms: " + feature["USER_Bathr"] + "\n";
+                            }
+                            catch
+                            {
+                                layerInfo += "Bathrooms: " + feature["USER_Bath"] + "\n";
+                            }
+                            layerInfo += "Rent per month: $" + feature["USER_Marke"] + "\n";
+                            layerInfo += "--------------------------------------\n";
+                        }
+                    }
                 }
-                // MessageBox.Show(c.ToString());
+
+                //break;
+                pane2.SelectedHouses += layerInfo;
+
             });
+            
+            //Adds attributes to dockpane 2
+            
         }
     }
 }

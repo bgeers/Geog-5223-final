@@ -20,6 +20,7 @@ using System.Windows;
 
 namespace Interactivity
 {
+    
     internal class DynamicSelectPointMenu : DynamicMenu
     {
         private static Dockpane2ViewModel pane2 = FrameworkApplication.DockPaneManager.Find("Interactivity_Dockpane2") as Dockpane2ViewModel;
@@ -93,6 +94,7 @@ namespace Interactivity
         private static void OnMenuItemClicked(Tuple<string, string, long> selectedTrippTuple)
         {
             string layerInfo = "";
+            string query = "";
             //pane2.SelectedHouses = "Hello!";
             Task t = QueuedTask.Run(() =>
             {
@@ -107,14 +109,21 @@ namespace Interactivity
                       StringComparison.CurrentCultureIgnoreCase));
                 foreach (var featureLayer in layers.OfType<FeatureLayer>())
                 {
-                    // select the features with a given OID
-                    var selection = featureLayer.Select(new QueryFilter()
+                    
+                    
+                    query += $@"{selectedTrippTuple.Item2} = {selectedTrippTuple.Item3}";
+                    QueryFilter filter = new QueryFilter
                     {
-                        WhereClause = $@"{selectedTrippTuple.Item2} = {selectedTrippTuple.Item3}"
-                    });
-                    ;
+                        
+                        WhereClause = query
+                        
+
+                    };
+
+                    var selection = featureLayer.Select(filter, SelectionCombinationMethod.Add);
+                    
                     //Finds attributes of the selected item
-                    using (RowCursor rc = selection.Search())
+                    using (RowCursor rc = featureLayer.Search(filter))
                     {
                         while (rc.MoveNext())
                         {
