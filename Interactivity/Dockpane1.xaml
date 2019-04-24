@@ -36,10 +36,19 @@
       </TextBlock>
         </DockPanel>
         <Label x:Name="label2" Content="" HorizontalAlignment="Left" Margin="76,21,0,0" Grid.Row="1" VerticalAlignment="Top" Height="0" Width="0" Grid.Column="1"/>
-        <ComboBox x:Name="cboLayerList" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" SelectionChanged="cboLayerList_SelectionChanged" HorizontalAlignment="Left" Width="206" Grid.Column="1"/>
+        <ComboBox x:Name="cboLayerList" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="206" Grid.Column="1"/>
         <Button x:Name="btnRefresh" Content="Refresh" Margin="240,10,0,0" Grid.Row="1" VerticalAlignment="Top" Click="button_Click" Height="23" HorizontalAlignment="Left" Width="75" Grid.Column="1"/>
-        <ListBox x:Name="lstFields" Height="354" Margin="10,51,0,0" Grid.Row="1" VerticalAlignment="Top" SelectionMode="Multiple" HorizontalAlignment="Left" Width="206" Grid.Column="1"/>
-        <TextBox x:Name="txtQuery" Height="23" Margin="10,424,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="206" Grid.Column="1"/>
-        <Button x:Name="btnFind" Content="Find" Margin="240,424,0,0" Grid.Row="1" VerticalAlignment="Top" Click="btnFind_Click" Height="23" HorizontalAlignment="Left" Width="75" Grid.Column="1"/>
+        <TextBox x:Name="rentQueryMin" Height="23" Margin="125,305,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
+        <Button x:Name="btnFind" Content="Find" Margin="141,466,0,0" Grid.Row="1" VerticalAlignment="Top" Click="btnFind_Click" Height="23" HorizontalAlignment="Left" Width="75" Grid.Column="1"/>
+        <TextBox x:Name="bthrmQueryMin" Height="23" Margin="125,226,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
+        <TextBox x:Name="bdrmQueryMin" Height="23" Margin="125,148,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
+        <TextBox x:Name="bdrmQueryMax" Height="23" Margin="259,148,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
+        <TextBox x:Name="bthrmQueryMax" Height="23" Margin="259,226,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
+        <TextBox x:Name="rentQueryMax" Height="23" Margin="259,305,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
+        <Label x:Name="label" Content="Min" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="141,106,0,0" Grid.Row="1" VerticalAlignment="Top" Width="56"/>
+        <Label x:Name="label1" Content="Max" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="272,106,0,0" Grid.Row="1" VerticalAlignment="Top" Width="56"/>
+        <Label x:Name="label3" Content="Bedrooms:" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="21,148,0,0" Grid.Row="1" VerticalAlignment="Top" Width="77"/>
+        <Label x:Name="label4" Content="Bathrooms:" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="21,226,0,0" Grid.Row="1" VerticalAlignment="Top" Width="77"/>
+        <Label x:Name="label5" Content="Rent:" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="21,305,0,0" Grid.Row="1" VerticalAlignment="Top" Width="77"/>
     </Grid>
 </UserControl>

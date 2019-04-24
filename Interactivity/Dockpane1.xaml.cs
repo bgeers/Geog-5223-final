@@ -59,53 +59,76 @@ namespace Interactivity
             }
         }
 
-        private async void cboLayerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string lname = cboLayerList.SelectedItem.ToString();
-            var mv = MapView.Active;
-            FeatureLayer fl = mv.Map.FindLayers(lname).FirstOrDefault() as FeatureLayer;
-
-            var fields = await QueuedTask.Run(() =>
-            {
-                FeatureClass fc = fl.GetFeatureClass();
-                FeatureClassDefinition fcdef = fc.GetDefinition();
-                return fcdef.GetFields();
-            });
-
-            lstFields.Items.Clear();
-            for (int i = 0; i < fields.Count; i++)
-            {
-                Field fld = fields[i];
-                if (fld.FieldType == FieldType.String)
-                    lstFields.Items.Add(fld.Name);
-            }
-            //lstFields.SelectAll();
-        }
+        
 
         private async void btnFind_Click(object sender, RoutedEventArgs e)
         {
             string layerInfo = "";
-            string text = txtQuery.Text;
+            string text = bdrmQueryMin.Text + bdrmQueryMax.Text + bthrmQueryMin.Text + bthrmQueryMax.Text + rentQueryMin.Text + rentQueryMax.Text;
             if (text == "")
                 return;
-            if (lstFields.SelectedItems.Count == 0)
-                return;
-
+            
             // get feature class first
             var mv = MapView.Active;
             string lname = cboLayerList.SelectedItem.ToString();
             FeatureLayer fl = mv.Map.FindLayers(lname).FirstOrDefault() as FeatureLayer;
 
-            var fields = lstFields.SelectedItems;
+            
             string query = "";
-            for (int i = 0; i < lstFields.SelectedItems.Count; i++)
+            
+            if(bdrmQueryMin.Text != "" && bdrmQueryMax.Text != "")
             {
-                query += string.Format("{0} LIKE '{1}'", lstFields.SelectedItems[i].ToString(), text);
-                if (i != lstFields.SelectedItems.Count - 1)
-                    query += " OR ";
+                query += string.Format("USER_Bdrm_ >= '{0}' AND USER_Bdrm_ <= '{1}'", bdrmQueryMin.Text, bdrmQueryMax.Text);
+            }
+            else if(bdrmQueryMin.Text != "")
+            {
+                query += string.Format("USER_Bdrm_ >= '{0}'", bdrmQueryMin.Text);
+            }
+            else if(bdrmQueryMax.Text != "")
+            {
+                query += string.Format("USER_Bdrm_ <= '{0}'", bdrmQueryMax.Text);
             }
 
-            //System.Windows.MessageBox.Show(query);
+            if(query != "" && bthrmQueryMin.Text != "" || bthrmQueryMax.Text != "")
+            {
+                query += " AND ";
+            }
+
+            if (bthrmQueryMin.Text != "" && bthrmQueryMax.Text != "")
+            {
+                query += string.Format("USER_Bath >= {0} AND USER_Bath <= {1}", bthrmQueryMin.Text, bthrmQueryMax.Text);
+            }
+            else if (bthrmQueryMin.Text != "")
+            {
+                query += string.Format("USER_Bath >= {0}", bthrmQueryMin.Text);
+            }
+            else if (bthrmQueryMax.Text != "")
+            {
+                query += string.Format("USER_Bath <= {0}", bthrmQueryMax.Text);
+            }
+
+            if (query != "" && rentQueryMin.Text != "" || rentQueryMax.Text != "")
+            {
+                query += " AND ";
+            }
+
+            if (rentQueryMin.Text != "" && rentQueryMax.Text != "")
+            {
+                query += string.Format("USER_Marke >= {0} AND USER_Marke <= {1}", rentQueryMin.Text, rentQueryMax.Text);
+            }
+            else if (rentQueryMin.Text != "")
+            {
+                query += string.Format("USER_Marke >= {0}", rentQueryMin.Text);
+            }
+            else if (rentQueryMax.Text != "")
+            {
+                query += string.Format("USER_Marke <= {0}", rentQueryMax.Text);
+            }
+            //query += string.Format("{0} LIKE '{1}'", lstFields.SelectedItems[i].ToString(), text);
+
+
+
+            System.Windows.MessageBox.Show(query);
 
             QueryFilter filter = new QueryFilter
             {
@@ -118,43 +141,49 @@ namespace Interactivity
             // select the features
             await QueuedTask.Run(() =>
             {
-                var selection = fl.Select(filter, SelectionCombinationMethod.Add);
-                //Finds attributes of the selected item
-                using (RowCursor rc = fl.Search(filter))
+                try
                 {
-                    while (rc.MoveNext())
+                    var selection = fl.Select(filter, SelectionCombinationMethod.Add);
+                    //Finds attributes of the selected item
+                    using (RowCursor rc = fl.Search(filter))
                     {
-                        using (Feature feature = (Feature)rc.Current)
+                        while (rc.MoveNext())
                         {
-                            layerInfo += "Address: " + feature["ShortLabel"] + "\n";
-                            layerInfo += "Neighborhood: " + feature["Nbrhd"] + "\n";
-                            layerInfo += "Building type: " + feature["USER_Type"] + "\n";
-                            try
+                            using (Feature feature = (Feature)rc.Current)
                             {
-                                layerInfo += "Bedrooms: " + feature["USER_Bedro"] + "\n";
-                            }
-                            catch
-                            {
-                                layerInfo += "Bedrooms: " + feature["USER_Bdrm_"] + "\n";
-                            }
+                                layerInfo += "Address: " + feature["ShortLabel"] + "\n";
+                                layerInfo += "Neighborhood: " + feature["Nbrhd"] + "\n";
+                                layerInfo += "Building type: " + feature["USER_Type"] + "\n";
+                                try
+                                {
+                                    layerInfo += "Bedrooms: " + feature["USER_Bedro"] + "\n";
+                                }
+                                catch
+                                {
+                                    layerInfo += "Bedrooms: " + feature["USER_Bdrm_"] + "\n";
+                                }
 
-                            try
-                            {
-                                layerInfo += "Bathrooms: " + feature["USER_Bathr"] + "\n";
+                                try
+                                {
+                                    layerInfo += "Bathrooms: " + feature["USER_Bathr"] + "\n";
+                                }
+                                catch
+                                {
+                                    layerInfo += "Bathrooms: " + feature["USER_Bath"] + "\n";
+                                }
+                                layerInfo += "Rent per month: $" + feature["USER_Marke"] + "\n";
+                                layerInfo += "--------------------------------------\n";
                             }
-                            catch
-                            {
-                                layerInfo += "Bathrooms: " + feature["USER_Bath"] + "\n";
-                            }
-                            layerInfo += "Rent per month: $" + feature["USER_Marke"] + "\n";
-                            layerInfo += "--------------------------------------\n";
                         }
                     }
+
+                    //break;
+                    pane2.SelectedHouses += layerInfo;
                 }
-
-                //break;
-                pane2.SelectedHouses += layerInfo;
-
+                catch (Exception exception)
+                {
+                    System.Windows.MessageBox.Show(exception.Message);
+                }
             });
             
             //Adds attributes to dockpane 2
