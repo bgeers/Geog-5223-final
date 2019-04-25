@@ -150,6 +150,13 @@ namespace Interactivity
                                     layerInfo += "Bathrooms: " + feature["USER_Bath"] + "\n";
                                 }
                                 layerInfo += "Rent per month: $" + feature["USER_Marke"] + "\n";
+                                if(feature["USER_Micro"] != "")
+                                {
+                                    layerInfo += "Microwave: Provided\n";
+                                }
+                                layerInfo += "Gas payed by: " + feature["USER_Gas"] + "\n";
+                                layerInfo += "Electric payed by: " + feature["USER_Elect"] + "\n";
+                                layerInfo += "Water payed by: " + feature["USER_Water"] + "\n";
                                 layerInfo += "--------------------------------------\n";
                             }
                         }

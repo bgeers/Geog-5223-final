@@ -42,11 +42,17 @@ namespace Interactivity
                 cboLayerList.Items.Add(l.Name);
                 cboLayerList.SelectedIndex = 0;
             }
+
+            lstAmenities.Items.Add("Microwave");
+            lstAmenities.Items.Add("Landlord pays gas");
+            lstAmenities.Items.Add("Landlord pays electric");
+            lstAmenities.Items.Add("Landlord pays water");
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
             cboLayerList.Items.Clear();
+            lstAmenities.Items.Clear();
             var mv = MapView.Active;
             if (mv == null)
                 return;
@@ -57,6 +63,10 @@ namespace Interactivity
                 cboLayerList.Items.Add(l.Name);
                 cboLayerList.SelectedIndex = 0;
             }
+            lstAmenities.Items.Add("Microwave");
+            lstAmenities.Items.Add("Landlord pays gas");
+            lstAmenities.Items.Add("Landlord pays electric");
+            lstAmenities.Items.Add("Landlord pays water");
         }
 
         
@@ -76,6 +86,7 @@ namespace Interactivity
             
             string query = "";
             
+            //Creates the query for bedrooms
             if(bdrmQueryMin.Text != "" && bdrmQueryMax.Text != "")
             {
                 query += string.Format("USER_Bdrm_ >= '{0}' AND USER_Bdrm_ <= '{1}'", bdrmQueryMin.Text, bdrmQueryMax.Text);
@@ -88,8 +99,9 @@ namespace Interactivity
             {
                 query += string.Format("USER_Bdrm_ <= '{0}'", bdrmQueryMax.Text);
             }
-
-            if(query != "" && bthrmQueryMin.Text != "" || bthrmQueryMax.Text != "")
+            System.Windows.MessageBox.Show(query);
+            //Adds bathrooms to query if present
+            if (query != "" && (bthrmQueryMin.Text != "" || bthrmQueryMax.Text != ""))
             {
                 query += " AND ";
             }
@@ -106,10 +118,13 @@ namespace Interactivity
             {
                 query += string.Format("USER_Bath <= {0}", bthrmQueryMax.Text);
             }
-
-            if (query != "" && rentQueryMin.Text != "" || rentQueryMax.Text != "")
+            System.Windows.MessageBox.Show(query);
+            //Adds rent range to query if present
+            if (query != "" && (rentQueryMin.Text != "" || rentQueryMax.Text != ""))
             {
+                
                 query += " AND ";
+                
             }
 
             if (rentQueryMin.Text != "" && rentQueryMax.Text != "")
@@ -124,10 +139,26 @@ namespace Interactivity
             {
                 query += string.Format("USER_Marke <= {0}", rentQueryMax.Text);
             }
-            //query += string.Format("{0} LIKE '{1}'", lstFields.SelectedItems[i].ToString(), text);
+            System.Windows.MessageBox.Show(query);
 
 
-
+            //Adds microwaves to query if present
+            if (lstAmenities.SelectedItems.Contains("Microwave"))
+            {
+                query += " AND USER_Micro = 'Microhood'";
+            }
+            if(lstAmenities.SelectedItems.Contains("Landlord pays gas"))
+            {
+                query += " AND USER_Gas = 'own'";
+            }
+            if (lstAmenities.SelectedItems.Contains("Landlord pays electric"))
+            {
+                query += " AND USER_Elect = 'own'";
+            }
+            if (lstAmenities.SelectedItems.Contains("Landlord pays water"))
+            {
+                query += " AND USER_Water = 'own'";
+            }
             System.Windows.MessageBox.Show(query);
 
             QueryFilter filter = new QueryFilter
@@ -172,6 +203,13 @@ namespace Interactivity
                                     layerInfo += "Bathrooms: " + feature["USER_Bath"] + "\n";
                                 }
                                 layerInfo += "Rent per month: $" + feature["USER_Marke"] + "\n";
+                                if (feature["USER_Micro"] != "")
+                                {
+                                    layerInfo += "Microwave: Provided\n";
+                                }
+                                layerInfo += "Gas payed by: " + feature["USER_Gas"] + "\n";
+                                layerInfo += "Electric payed by: " + feature["USER_Elect"] + "\n";
+                                layerInfo += "Water payed by: " + feature["USER_Water"] + "\n";
                                 layerInfo += "--------------------------------------\n";
                             }
                         }
