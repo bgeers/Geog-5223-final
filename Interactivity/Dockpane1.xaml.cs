@@ -43,10 +43,19 @@ namespace Interactivity
                 cboLayerList.SelectedIndex = 0;
             }
 
-            lstAmenities.Items.Add("Microwave");
+            
             lstAmenities.Items.Add("Landlord pays gas");
             lstAmenities.Items.Add("Landlord pays electric");
             lstAmenities.Items.Add("Landlord pays water");
+            lstAmenities.Items.Add("Microwave");
+            lstAmenities.Items.Add("Dishwasher");
+            lstAmenities.Items.Add("Central Air");
+            lstAmenities.Items.Add("Alarm System");
+            lstAmenities.Items.Add("Porch");
+            lstAmenities.Items.Add("Balcony");
+            lstAmenities.Items.Add("Included washer/dryer");
+            lstAmenities.Items.Add("Coin laundry");
+            lstAmenities.Items.Add("Off Street Parking");
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -63,10 +72,19 @@ namespace Interactivity
                 cboLayerList.Items.Add(l.Name);
                 cboLayerList.SelectedIndex = 0;
             }
-            lstAmenities.Items.Add("Microwave");
+            
             lstAmenities.Items.Add("Landlord pays gas");
             lstAmenities.Items.Add("Landlord pays electric");
             lstAmenities.Items.Add("Landlord pays water");
+            lstAmenities.Items.Add("Microwave");
+            lstAmenities.Items.Add("Dishwasher");
+            lstAmenities.Items.Add("Central Air");
+            lstAmenities.Items.Add("Alarm System");
+            lstAmenities.Items.Add("Porch");
+            lstAmenities.Items.Add("Balcony");
+            lstAmenities.Items.Add("Included washer/dryer");
+            lstAmenities.Items.Add("Coin laundry");
+            lstAmenities.Items.Add("Off Street Parking");
         }
 
         
@@ -99,7 +117,7 @@ namespace Interactivity
             {
                 query += string.Format("USER_Bdrm_ <= '{0}'", bdrmQueryMax.Text);
             }
-            System.Windows.MessageBox.Show(query);
+            //System.Windows.MessageBox.Show(query);
             //Adds bathrooms to query if present
             if (query != "" && (bthrmQueryMin.Text != "" || bthrmQueryMax.Text != ""))
             {
@@ -118,7 +136,7 @@ namespace Interactivity
             {
                 query += string.Format("USER_Bath <= {0}", bthrmQueryMax.Text);
             }
-            System.Windows.MessageBox.Show(query);
+            //System.Windows.MessageBox.Show(query);
             //Adds rent range to query if present
             if (query != "" && (rentQueryMin.Text != "" || rentQueryMax.Text != ""))
             {
@@ -139,10 +157,10 @@ namespace Interactivity
             {
                 query += string.Format("USER_Marke <= {0}", rentQueryMax.Text);
             }
-            System.Windows.MessageBox.Show(query);
+            //System.Windows.MessageBox.Show(query);
 
 
-            //Adds microwaves to query if present
+            //Adds selected amenities to query
             if (lstAmenities.SelectedItems.Contains("Microwave"))
             {
                 query += " AND USER_Micro = 'Microhood'";
@@ -159,6 +177,40 @@ namespace Interactivity
             {
                 query += " AND USER_Water = 'own'";
             }
+            if (lstAmenities.SelectedItems.Contains("Dishwasher"))
+            {
+                query += " AND USER_Dishw = 'Dishwasher'";
+            }
+            if (lstAmenities.SelectedItems.Contains("Central Air"))
+            {
+                query += " AND USER_Centr = 'Central Air'";
+            }
+            if (lstAmenities.SelectedItems.Contains("Alarm System"))
+            {
+                query += " AND USER_Alarm = 'Alarm System'";
+            }
+            if (lstAmenities.SelectedItems.Contains("Porch"))
+            {
+                query += " AND USER_Porch = 'Porch'";
+            }
+            if (lstAmenities.SelectedItems.Contains("Balcony"))
+            {
+                query += " AND USER_Balco LIKE 'Balcony%'";
+            }
+            if (lstAmenities.SelectedItems.Contains("Included washer/dryer"))
+            {
+                query += " AND USER_Laund  LIKE 'Washer%'";
+            }
+            if (lstAmenities.SelectedItems.Contains("Coin laundry"))
+            {
+                query += " AND USER_Coin LIKE 'Coin%'";
+            }
+            if (lstAmenities.SelectedItems.Contains("Off Street Parking"))
+            {
+                query += " AND USER_Off_S LIKE 'Off%'";
+            }
+
+            
             System.Windows.MessageBox.Show(query);
 
             QueryFilter filter = new QueryFilter
@@ -203,14 +255,94 @@ namespace Interactivity
                                     layerInfo += "Bathrooms: " + feature["USER_Bath"] + "\n";
                                 }
                                 layerInfo += "Rent per month: $" + feature["USER_Marke"] + "\n";
-                                if (feature["USER_Micro"] != "")
-                                {
-                                    layerInfo += "Microwave: Provided\n";
-                                }
+                                
                                 layerInfo += "Gas payed by: " + feature["USER_Gas"] + "\n";
                                 layerInfo += "Electric payed by: " + feature["USER_Elect"] + "\n";
                                 layerInfo += "Water payed by: " + feature["USER_Water"] + "\n";
-                                layerInfo += "--------------------------------------\n";
+                                if (pane2.IsAmenitiesShown == true)
+                                {
+                                    if (feature["USER_Micro"].ToString().Contains("Micro"))
+                                    {
+                                        layerInfo += "Microwave: Provided\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Microwave: Not Provided\n";
+                                    }
+
+                                    if (feature["USER_Dishw"].ToString().Contains("Dish"))
+                                    {
+                                        layerInfo += "Dishwasher: Provided\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Dishwasher: Not Provided\n";
+                                    }
+
+                                    if (feature["USER_Centr"].ToString().Contains("Central"))
+                                    {
+                                        layerInfo += "Has central air\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have central air\n";
+                                    }
+
+                                    if (feature["USER_Alarm"].ToString().Contains("Alarm"))
+                                    {
+                                        layerInfo += "Has alarm system\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have alarm system\n";
+                                    }
+
+                                    if (feature["USER_Porch"].ToString().Contains("Porch"))
+                                    {
+                                        layerInfo += "Has porch\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have porch\n";
+                                    }
+
+                                    if (feature["USER_Balco"].ToString().Contains("Balcony"))
+                                    {
+                                        layerInfo += "Has balcony\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have balcony\n";
+                                    }
+
+                                    if (feature["USER_Laund"].ToString().Contains("Washer"))
+                                    {
+                                        layerInfo += "Has washer/dryer\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have washer/dryer\n";
+                                    }
+
+                                    if (feature["USER_Coin"].ToString().Contains("Coin"))
+                                    {
+                                        layerInfo += "Has coin op laundry\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have coin op laundry\n";
+                                    }
+
+                                    if (feature["USER_Off_S"].ToString().Contains("Off"))
+                                    {
+                                        layerInfo += "Has off street parking\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have off street parking\n";
+                                    }
+                                }
+                                layerInfo += "--------------------------------------\n\n";
                             }
                         }
                     }
@@ -220,7 +352,7 @@ namespace Interactivity
                 }
                 catch (Exception exception)
                 {
-                    System.Windows.MessageBox.Show(exception.Message);
+                    System.Windows.MessageBox.Show("No Results Found");
                 }
             });
             

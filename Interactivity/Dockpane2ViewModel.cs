@@ -59,6 +59,16 @@ namespace Interactivity
                 SetProperty(ref _SelectedHouses, value, () => SelectedHouses);
             }
         }
+
+        private bool _isAmenitiesShown = false;
+        /// <summary>
+        /// Checks if amenities should be shown
+        /// </summary>
+        public bool IsAmenitiesShown
+        {
+            get { return _isAmenitiesShown; }
+            set { SetProperty(ref _isAmenitiesShown, value, () => IsAmenitiesShown); }
+        }
     }
 
     /// <summary>

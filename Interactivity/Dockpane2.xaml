@@ -31,5 +31,6 @@
         </DockPanel>
         <Label x:Name="label" Content="Selected House information" HorizontalAlignment="Left" Margin="16,5,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <TextBox x:Name="SelectedHomes" Text="{Binding SelectedHouses}" HorizontalAlignment="Left" Height="422" Margin="16,35,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="306" IsReadOnly="True" VerticalScrollBarVisibility="Visible"/>
+        <CheckBox x:Name="checkBox" Content="Show Amenities" IsChecked ="{Binding IsAmenitiesShown}" HorizontalAlignment="Left" Height="36" Margin="111,479,0,0" Grid.Row="1" VerticalAlignment="Top" Width="182"/>
     </Grid>
 </UserControl>

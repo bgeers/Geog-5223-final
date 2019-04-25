@@ -98,66 +98,149 @@ namespace Interactivity
             //pane2.SelectedHouses = "Hello!";
             Task t = QueuedTask.Run(() =>
             {
-                
-                
-                
-                //Selects item chosen from menu
-                var mapView = MapView.Active;
-                var layers =
-                  mapView.Map.GetLayersAsFlattenedList()
-                    .Where(l => l.Name.Equals(selectedTrippTuple.Item1,
-                      StringComparison.CurrentCultureIgnoreCase));
-                foreach (var featureLayer in layers.OfType<FeatureLayer>())
+
+
+
+            //Selects item chosen from menu
+            var mapView = MapView.Active;
+            var layers =
+              mapView.Map.GetLayersAsFlattenedList()
+                .Where(l => l.Name.Equals(selectedTrippTuple.Item1,
+                  StringComparison.CurrentCultureIgnoreCase));
+            foreach (var featureLayer in layers.OfType<FeatureLayer>())
+            {
+
+
+                query += $@"{selectedTrippTuple.Item2} = {selectedTrippTuple.Item3}";
+                QueryFilter filter = new QueryFilter
                 {
-                    
-                    
-                    query += $@"{selectedTrippTuple.Item2} = {selectedTrippTuple.Item3}";
-                    QueryFilter filter = new QueryFilter
-                    {
-                        
-                        WhereClause = query
-                        
 
-                    };
+                    WhereClause = query
 
-                    var selection = featureLayer.Select(filter, SelectionCombinationMethod.Add);
-                    
-                    //Finds attributes of the selected item
-                    using (RowCursor rc = featureLayer.Search(filter))
+
+                };
+
+                var selection = featureLayer.Select(filter, SelectionCombinationMethod.Add);
+
+                //Finds attributes of the selected item
+                using (RowCursor rc = featureLayer.Search(filter))
+                {
+                    while (rc.MoveNext())
                     {
-                        while (rc.MoveNext())
+                        using (Feature feature = (Feature)rc.Current)
                         {
-                            using (Feature feature = (Feature)rc.Current)
+                            layerInfo += "Address: " + feature["ShortLabel"] + "\n";
+                            layerInfo += "Neighborhood: " + feature["Nbrhd"] + "\n";
+                            layerInfo += "Building type: " + feature["USER_Type"] + "\n";
+                            try
                             {
-                                layerInfo += "Address: " + feature["ShortLabel"] + "\n";
-                                layerInfo += "Neighborhood: " + feature["Nbrhd"] + "\n";
-                                layerInfo += "Building type: " + feature["USER_Type"] + "\n";
-                                try
-                                {
-                                    layerInfo += "Bedrooms: " + feature["USER_Bedro"] + "\n";
-                                }
-                                catch
-                                {
-                                    layerInfo += "Bedrooms: " + feature["USER_Bdrm_"] + "\n";
-                                }
+                                layerInfo += "Bedrooms: " + feature["USER_Bedro"] + "\n";
+                            }
+                            catch
+                            {
+                                layerInfo += "Bedrooms: " + feature["USER_Bdrm_"] + "\n";
+                            }
 
-                                try
+                            try
+                            {
+                                layerInfo += "Bathrooms: " + feature["USER_Bathr"] + "\n";
+                            }
+                            catch
+                            {
+                                layerInfo += "Bathrooms: " + feature["USER_Bath"] + "\n";
+                            }
+                            layerInfo += "Rent per month: $" + feature["USER_Marke"] + "\n";
+
+                            layerInfo += "Gas payed by: " + feature["USER_Gas"] + "\n";
+                            layerInfo += "Electric payed by: " + feature["USER_Elect"] + "\n";
+                            layerInfo += "Water payed by: " + feature["USER_Water"] + "\n";
+
+
+                            if (pane2.IsAmenitiesShown == true)
                                 {
-                                    layerInfo += "Bathrooms: " + feature["USER_Bathr"] + "\n";
+
+                                    if (feature["USER_Micro"].ToString().Contains("Micro"))
+                                    {
+                                        layerInfo += "Microwave: Provided\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Microwave: Not Provided\n";
+                                    }
+
+                                    if (feature["USER_Dishw"].ToString().Contains("Dish"))
+                                    {
+                                        layerInfo += "Dishwasher: Provided\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Dishwasher: Not Provided\n";
+                                    }
+
+                                    if (feature["USER_Centr"].ToString().Contains("Central"))
+                                    {
+                                        layerInfo += "Has central air\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have central air\n";
+                                    }
+
+                                    if (feature["USER_Alarm"].ToString().Contains("Alarm"))
+                                    {
+                                        layerInfo += "Has alarm system\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have alarm system\n";
+                                    }
+
+                                    if (feature["USER_Porch"].ToString().Contains("Porch"))
+                                    {
+                                        layerInfo += "Has porch\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have porch\n";
+                                    }
+
+                                    if (feature["USER_Balco"].ToString().Contains("Balcony"))
+                                    {
+                                        layerInfo += "Has balcony\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have balcony\n";
+                                    }
+
+                                    if (feature["USER_Laund"].ToString().Contains("Washer"))
+                                    {
+                                        layerInfo += "Has washer/dryer\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have washer/dryer\n";
+                                    }
+
+                                    if (feature["USER_Coin"].ToString().Contains("Coin"))
+                                    {
+                                        layerInfo += "Has coin op laundry\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have coin op laundry\n";
+                                    }
+
+                                    if (feature["USER_Off_S"].ToString().Contains("Off"))
+                                    {
+                                        layerInfo += "Has off street parking\n";
+                                    }
+                                    else
+                                    {
+                                        layerInfo += "Does not have off street parking\n";
+                                    }
                                 }
-                                catch
-                                {
-                                    layerInfo += "Bathrooms: " + feature["USER_Bath"] + "\n";
-                                }
-                                layerInfo += "Rent per month: $" + feature["USER_Marke"] + "\n";
-                                if(feature["USER_Micro"] != "")
-                                {
-                                    layerInfo += "Microwave: Provided\n";
-                                }
-                                layerInfo += "Gas payed by: " + feature["USER_Gas"] + "\n";
-                                layerInfo += "Electric payed by: " + feature["USER_Elect"] + "\n";
-                                layerInfo += "Water payed by: " + feature["USER_Water"] + "\n";
-                                layerInfo += "--------------------------------------\n";
+                                layerInfo += "--------------------------------------\n\n";
                             }
                         }
                     }

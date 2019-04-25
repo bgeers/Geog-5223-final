@@ -6,7 +6,7 @@
              xmlns:ui="clr-namespace:Interactivity"
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d"
-             d:DataContext="{Binding Path=ui.Dockpane1ViewModel}" Height="580.698" Width="354.08">
+             d:DataContext="{Binding Path=ui.Dockpane1ViewModel}" Height="721.698" Width="354.08">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -39,7 +39,7 @@
         <ComboBox x:Name="cboLayerList" Margin="10,47,0,0" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="206" Grid.Column="1"/>
         <Button x:Name="btnRefresh" Content="Refresh" Margin="240,47,0,0" Grid.Row="1" VerticalAlignment="Top" Click="button_Click" Height="23" HorizontalAlignment="Left" Width="75" Grid.Column="1"/>
         <TextBox x:Name="rentQueryMin" Height="23" Margin="125,298,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
-        <Button x:Name="btnFind" Content="Find" Margin="141,466,0,0" Grid.Row="1" VerticalAlignment="Top" Click="btnFind_Click" Height="23" HorizontalAlignment="Left" Width="75" Grid.Column="1"/>
+        <Button x:Name="btnFind" Content="Find" Margin="141,562,0,0" Grid.Row="1" VerticalAlignment="Top" Click="btnFind_Click" Height="23" HorizontalAlignment="Left" Width="75" Grid.Column="1"/>
         <TextBox x:Name="bthrmQueryMin" Height="23" Margin="125,226,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
         <TextBox x:Name="bdrmQueryMin" Height="23" Margin="125,148,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
         <TextBox x:Name="bdrmQueryMax" Height="23" Margin="222,148,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Top" HorizontalAlignment="Left" Width="56" Grid.Column="1"/>
@@ -51,7 +51,7 @@
         <Label x:Name="label4" Content="Bathrooms:" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="21,226,0,0" Grid.Row="1" VerticalAlignment="Top" Width="77"/>
         <Label x:Name="label5" Content="Rent:" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="21,298,0,0" Grid.Row="1" VerticalAlignment="Top" Width="77"/>
         <Label x:Name="label6" Content="Neighborhood:" Grid.Column="1" HorizontalAlignment="Left" Height="32" Margin="10,15,0,0" Grid.Row="1" VerticalAlignment="Top" Width="185"/>
-        <ListBox x:Name="lstAmenities" Grid.Column="1" HorizontalAlignment="Left" Height="71" Margin="125,350,0,0" Grid.Row="1" VerticalAlignment="Top" Width="153" SelectionMode="Multiple"/>
+        <ListBox x:Name="lstAmenities" Grid.Column="1" HorizontalAlignment="Left" Height="156" Margin="125,350,0,0" Grid.Row="1" VerticalAlignment="Top" Width="153" SelectionMode="Multiple"/>
         <Label x:Name="label7" Content="Amenities" Grid.Column="1" HorizontalAlignment="Left" Height="33" Margin="21,350,0,0" Grid.Row="1" VerticalAlignment="Top" Width="77"/>
     </Grid>
 </UserControl>
